@@ -34,6 +34,7 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("fig/pg_bg.jpg")    
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
+    kk_af = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900, 400
     #爆弾
@@ -45,17 +46,26 @@ def main():
     vx,vy = +5,+5 
     clock = pg.time.Clock()
     tmr = 0
+
+    MUKI = {
+        (0,-5):pg.transform.rotozoom(kk_img,270,1), #↑
+        (0,5):pg.transform.rotozoom(kk_img,90,1), #↓
+        (-5,0):pg.transform.rotozoom(kk_img,180,1), #←
+        (5,0):pg.transform.rotozoom(kk_img,0,1), #→
+    }
+
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
+
         if kk_rct.colliderect(bb_rct):
             return
-        screen.blit(bg_img, [0, 0]) 
+        screen.blit(bg_img, [0, 0])
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
-        for k, v in DELTA.items():
+        for k, v in MUKI.items():
             if key_lst[k]:
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
